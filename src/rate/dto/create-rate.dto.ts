@@ -1,14 +1,16 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+// src/rate/dto/create-rate.dto.ts
+import { IsInt, IsUUID, IsOptional, Min, Max } from 'class-validator';
 
 export class CreateRateDto {
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  value: number;
 
-  @IsString()
+  @IsUUID()
   userId: string;
 
-  @IsString()
-  postId: string;
-
+  @IsUUID()
   @IsOptional()
-  @IsNumber()
-  value: number; // Assuming value is a number representing the rating
+  garageId?: string;
 }

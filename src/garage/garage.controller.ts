@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+// src/garage/garage.controller.ts
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { GarageService } from './garage.service';
 import { CreateGarageDto } from './dto/create-garage.dto';
 import { UpdateGarageDto } from './dto/update-garage.dto';
@@ -22,7 +23,7 @@ export class GarageController {
     return this.garageService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() dto: UpdateGarageDto) {
     return this.garageService.update(id, dto);
   }

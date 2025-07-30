@@ -1,29 +1,41 @@
+// src/garage/garage.service.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Garage } from './Entity/garage.entity';
+import { Repository } from 'typeorm';
 import { CreateGarageDto } from './dto/create-garage.dto';
 import { UpdateGarageDto } from './dto/update-garage.dto';
 
 @Injectable()
 export class GarageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(Garage)
+    private readonly garageRepository: Repository<Garage>,
+  ) {}
 
   create(dto: CreateGarageDto) {
-    return this.prisma.garage.create({ data: dto });
+    const garage = this.garageRepository.create(dto);
+    return this.garageRepository.save(garage);
   }
 
   findAll() {
-    return this.prisma.garage.findMany({ include: { owner: true, Rate: true } });
+    return this.garageRepository.find({ relations: ['user', 'rates'] });
   }
 
   findOne(id: string) {
-    return this.prisma.garage.findUnique({ where: { id }, include: { owner: true, Rate: true } });
+    return this.garageRepository.findOne({
+      where: { id },
+      relations: ['user', 'rates'],
+    });
   }
 
-  update(id: string, dto: UpdateGarageDto) {
-    return this.prisma.garage.update({ where: { id }, data: dto });
+  async update(id: string, dto: UpdateGarageDto) {
+    await this.garageRepository.update(id, dto);
+    return this.findOne(id);
   }
 
-  remove(id: string) {
-    return this.prisma.garage.delete({ where: { id } });
+  async remove(id: string) {
+    await this.garageRepository.delete(id);
+    return { deleted: true };
   }
 }

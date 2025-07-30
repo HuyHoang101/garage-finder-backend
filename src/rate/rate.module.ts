@@ -1,10 +1,12 @@
+// src/rate/rate.module.ts
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Rate } from './Entity/rate.entity';
 import { RateService } from './rate.service';
 import { RateController } from './rate.controller';
-import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [TypeOrmModule.forFeature([Rate])],
   controllers: [RateController],
   providers: [RateService],
 })

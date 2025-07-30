@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+// src/rate/rate.controller.ts
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { RateService } from './rate.service';
 import { CreateRateDto } from './dto/create-rate.dto';
 import { UpdateRateDto } from './dto/update-rate.dto';
@@ -8,8 +9,8 @@ export class RateController {
   constructor(private readonly rateService: RateService) {}
 
   @Post()
-  create(@Body() createRateDto: CreateRateDto) {
-    return this.rateService.create(createRateDto);
+  create(@Body() dto: CreateRateDto) {
+    return this.rateService.create(dto);
   }
 
   @Get()
@@ -23,8 +24,8 @@ export class RateController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateRateDto: UpdateRateDto) {
-    return this.rateService.update(id, updateRateDto);
+  update(@Param('id') id: string, @Body() dto: UpdateRateDto) {
+    return this.rateService.update(id, dto);
   }
 
   @Delete(':id')

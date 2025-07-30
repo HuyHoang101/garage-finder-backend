@@ -1,10 +1,12 @@
+// src/car/car.module.ts
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Car } from './Entity/car.entity';
 import { CarService } from './car.service';
 import { CarController } from './car.controller';
-import { PrismaModule } from '../../prisma/prisma.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [TypeOrmModule.forFeature([Car])],
   controllers: [CarController],
   providers: [CarService],
 })

@@ -1,29 +1,41 @@
+// src/car/car.service.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Car } from './Entity/car.entity';
+import { Repository } from 'typeorm';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
 
 @Injectable()
 export class CarService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectRepository(Car)
+    private readonly carRepository: Repository<Car>,
+  ) {}
 
   create(dto: CreateCarDto) {
-    return this.prisma.car.create({ data: dto });
+    const car = this.carRepository.create(dto);
+    return this.carRepository.save(car);
   }
 
   findAll() {
-    return this.prisma.car.findMany({ include: { owner: true } });
+    return this.carRepository.find({ relations: ['user'] });
   }
 
   findOne(id: string) {
-    return this.prisma.car.findUnique({ where: { id }, include: { owner: true } });
+    return this.carRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
   }
 
-  update(id: string, dto: UpdateCarDto) {
-    return this.prisma.car.update({ where: { id }, data: dto });
+  async update(id: string, dto: UpdateCarDto) {
+    await this.carRepository.update(id, dto);
+    return this.findOne(id);
   }
 
-  remove(id: string) {
-    return this.prisma.car.delete({ where: { id } });
+  async remove(id: string) {
+    await this.carRepository.delete(id);
+    return { deleted: true };
   }
 }

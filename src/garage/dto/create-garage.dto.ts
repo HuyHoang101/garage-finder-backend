@@ -1,13 +1,20 @@
-import { IsString, IsOptional } from 'class-validator';
+// src/garage/dto/create-garage.dto.ts
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateGarageDto {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
-  location: string;
-
   @IsOptional()
+  description?: string;
+
   @IsString()
-  ownerId?: string;
+  @IsOptional()
+  location?: string;
+
+  @IsUUID()
+  @IsOptional()
+  userId?: string;
 }

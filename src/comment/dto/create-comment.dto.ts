@@ -1,12 +1,14 @@
-import { IsString } from 'class-validator';
+// src/comment/dto/create-comment.dto.ts
+import { IsNotEmpty, IsUUID, IsString } from 'class-validator';
 
 export class CreateCommentDto {
   @IsString()
+  @IsNotEmpty()
   content: string;
 
-  @IsString()
-  postId: string;
-
-  @IsString()
+  @IsUUID()
   authorId: string;
+
+  @IsUUID()
+  postId: string;
 }
